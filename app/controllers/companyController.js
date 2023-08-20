@@ -22,7 +22,7 @@ const getCompaniesById = async (req, res) => {
 };
 
 const createCompanies = async (req, res) => {
-    const { company } = req.body;;
+    const { company } = req.body;
     const newCompany = await Company.create(company);
     res.status(200)
         .json({

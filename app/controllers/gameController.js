@@ -12,8 +12,8 @@ const getGames = async (req, res) => {
 };
 
 const getGamesById = async (req, res) => {
-    const { id } = req.params;
-    const games = await Game.findById(id);
+    const { gamesId } = req.params;
+    const games = await Game.findById(gamesId);
     res.status(200)
     .json({
         data: games,
@@ -34,8 +34,8 @@ const createGames = async (req, res) => {
     } 
 
 const updateGames = async (req, res) => {
-        const { id } = req.params;
-        const games = await Game.findByIdAndUpdate(id, req.body, {
+        const { gamesId } = req.params;
+        const games = await Game.findByIdAndUpdate(gamesId, req.body, {
             new: true,
             runValidators: true,
         });
@@ -48,11 +48,11 @@ const updateGames = async (req, res) => {
 };
 
 const deleteGames = async (req, res) => {
-    const { id } = req.params;
-    await Game.findByIdAndDelete(id);
+    const { gamesId } = req.params;
+    await Game.findByIdAndDelete(gamesId);
     res.status(200)
        .json({
-            id,
+            gamesId,
             status: "success",
             message: `${req.method} - Games request made`,
         });
