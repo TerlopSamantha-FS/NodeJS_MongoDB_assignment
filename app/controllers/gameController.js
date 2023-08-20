@@ -41,7 +41,7 @@ const updateGames = async (req, res) => {
         });
         res.status(200)
         .json({
-            data: games,
+            gamesId,
             status: "success",
             message: `${req.method} - Games request made`,
         });
