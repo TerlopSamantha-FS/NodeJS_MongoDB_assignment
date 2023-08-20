@@ -12,10 +12,10 @@ const getCompanies = async (req, res) => {
 
 const getCompaniesById = async (req, res) => {
     const { id } = req.params;
-    const company = await Company.findById(id);
+    const companies = await Company.findById(id);
     res.status(200)
     .json({
-        data: company,
+        data: companies,
         status: "success",
         message: `${req.method} - Companies Id request made`,
     });
@@ -35,13 +35,13 @@ const createCompanies = async (req, res) => {
 
 const updateCompanies = async (req, res) => {
     const { id } = req.params;
-    const company = await Company.findByIdAndUpdate(id, req.body, {
+    const companies = await Company.findByIdAndUpdate(id, req.body, {
         new: true,
         runValidators: true,
     });
     res.status(200)
        .json({
-        data: company,
+        data: companies,
         status: "success",
         message: `${req.method} - Companies request made`, 
     });

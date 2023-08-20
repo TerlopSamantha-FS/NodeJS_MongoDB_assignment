@@ -13,17 +13,17 @@ const getGames = async (req, res) => {
 
 const getGamesById = async (req, res) => {
     const { id } = req.params;
-    const game = await Game.findById(id);
+    const games = await Game.findById(id);
     res.status(200)
     .json({
-        data: game,
+        data: games,
         status: "success",
         message: `${req.method} - Games Id request made`,
     });
 };
 
 const createGames = async (req, res) => {
-    const {game} = req.body;
+    const { game } = req.body;
         const newGame = await Game.create(game); 
         res.status(200)
         .json({
@@ -35,13 +35,13 @@ const createGames = async (req, res) => {
 
 const updateGames = async (req, res) => {
         const { id } = req.params;
-        const game = await Game.findByIdAndUpdate(id, req.body, {
+        const games = await Game.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true,
         });
         res.status(200)
         .json({
-            data: game,
+            data: games,
             status: "success",
             message: `${req.method} - Games request made`,
         });
