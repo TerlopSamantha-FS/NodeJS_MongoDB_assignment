@@ -1,17 +1,18 @@
 const Company = require('../models/companies');
+
 const getCompanies = async (req, res) => {
-    const company = await Company.find();
+    const companies = await Company.find();
     res.status(200)
     .json({
-        data: company,
+        data: companies,
         status: "success",
-        message: `${req.method} - Companies request made`,
+        message: `${req.method} - Company request made`,
      });  
 };
 
 const getCompaniesById = async (req, res) => {
-    const {id} = req.params;
-    const company = await Company.findById();
+    const { id } = req.params;
+    const company = await Company.findById(id);
     res.status(200)
     .json({
         data: company,
@@ -21,33 +22,40 @@ const getCompaniesById = async (req, res) => {
 };
 
 const createCompanies = async (req, res) => {
-    const {company} = req.body;
+    const { company } = req.body;;
     const newCompany = await Company.create(company);
     res.status(200)
-    .json({
-        data:newCompany,
-        status: "success",
-        message: `${req.method} - Companies POST`,
-    });
+        .json({
+            data: newCompany,
+            status: "success",
+            message: `${req.method} - Companies request made`,
+        });
 };
+        
 
 const updateCompanies = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
+    const company = await Company.findByIdAndUpdate(id, req.body, {
+        new: true,
+        runValidators: true,
+    });
     res.status(200)
        .json({
+        data: company,
         status: "success",
-        message: `${req.method} - Companies PATCH`, 
+        message: `${req.method} - Companies request made`, 
     });
+
 };
 
 const deleteCompanies = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
     await Company.findByIdAndDelete(id);
     res.status(200)
        .json({
         id,
         status: "success",
-            message: `${req.method} - Companies DELETE`,
+        message: `${req.method} - Companies request made`,
     });
 };
 

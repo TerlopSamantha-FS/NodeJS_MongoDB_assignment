@@ -1,64 +1,60 @@
 const Game = require('../models/games');
 
 const getGames = async (req, res) => {
-    const game = await Game.find();
+    const games = await Game.find();
     res.status(200)
-    .json({
-        data: game,
-        status: "success",
-        message: `${req.method} - games request made`,
-     }); 
+        .json({
+            data: games,
+            status: "success",
+            message: `${req.method} - game request made`,
+        }); 
     
 };
 
 const getGamesById = async (req, res) => {
-    const gamesId = req.params.gamesId;
-    const game = await Game.findById();
+    const { id } = req.params;
+    const game = await Game.findById(id);
     res.status(200)
     .json({
-        gamesId,
+        data: game,
         status: "success",
         message: `${req.method} - Games Id request made`,
     });
 };
 
 const createGames = async (req, res) => {
-    const gameData = req.body.game;
-    try {
-        const newGame = await Game.create(gameData); 
-        res.status(200).json({
-            data: newGame,
-            status: 'success',
-            message: `${req.method} - Games POST`,
-        });
-    } catch (error) {
-        // Handle any errors that occur during the creation process
-        res.status(500).json({
-            status: 'error',
-            message: 'An error occurred while creating the game.',
-            error: error.message,
-        });
-    }
-};
-
-const updateGames = async (req, res) => {
-        const gamesId = req.params.gamesId;
+    const {game} = req.body;
+        const newGame = await Game.create(game); 
         res.status(200)
         .json({
-            gamesId,
-            status: "success",
-            message: `${req.method} - Games PATCH`,
+            data: newGame,
+            status: 'success',
+            message: `${req.method} - Games request made`,
         });
-}
+    } 
 
+const updateGames = async (req, res) => {
+        const { id } = req.params;
+        const game = await Game.findByIdAndUpdate(id, req.body, {
+            new: true,
+            runValidators: true,
+        });
+        res.status(200)
+        .json({
+            data: game,
+            status: "success",
+            message: `${req.method} - Games request made`,
+        });
+};
 
 const deleteGames = async (req, res) => {
-    const gamesId = req.params.gamesId;
+    const { id } = req.params;
+    await Game.findByIdAndDelete(id);
     res.status(200)
        .json({
-            gamesId,
-            message: `${req.method} - Games DELETE`,
-            id: gamesId
+            id,
+            status: "success",
+            message: `${req.method} - Games request made`,
         });
 };
 
