@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
     const companySchema = new mongoose.Schema( {
-        
-        companyTitle: {
+        companyName: {
             type: String,
-            required: [true, 'Please add the company name!'],
-            unique: true,
+            required: [true ,'company is already added. Please enter a new company.'],
+            unique: true ,
         },
         about: {
             type: String,
@@ -14,7 +13,10 @@ const mongoose = require('mongoose');
         },
         yearFounded: {
             type: Number,
-        }
+        },
+        CEO: {
+            type: String,
+        },
 });
 
 

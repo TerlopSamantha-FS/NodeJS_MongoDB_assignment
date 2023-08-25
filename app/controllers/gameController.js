@@ -2,21 +2,20 @@ const Game = require('../models/games');
 
 const getGames = async (req, res) => {
     const games = await Game.find();
-    res.status(200)
+    res.status(200) 
         .json({
             data: games,
             status: "success",
             message: `${req.method} - game request made`,
-        }); 
-    
+        })  
 };
 
 const getGamesById = async (req, res) => {
     const { gamesId } = req.params;
     const games = await Game.findById(gamesId);
-    res.status(200)
+    res.status(200) 
     .json({
-        data: games,
+        data: gamesId,
         status: "success",
         message: `${req.method} - Games Id request made`,
     });
