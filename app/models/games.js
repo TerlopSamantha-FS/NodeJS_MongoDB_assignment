@@ -14,8 +14,8 @@ const gameSchema = new mongoose.Schema( {
         type: Number,
     },
     company: {
-        type: String,
-        ref: "company",
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"company",
         required: [true, 'Please add the company name!'],
     },
     

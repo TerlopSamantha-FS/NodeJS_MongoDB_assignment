@@ -14,8 +14,8 @@ const getCompanies = async (req, res) => {
 const getCompaniesById = async (req, res) => {
     const { companiesId } = req.params;
     await Company.findById(companiesId)
-        .select("company about yearFounded CEO")
-        .populate("game", "name company")
+        .select("companyName about yearFounded CEO")
+        .populate("")
         .exec()
         .then(company => {
             if (!company) {
@@ -39,11 +39,11 @@ const getCompaniesById = async (req, res) => {
 };
 
 const createCompanies = async (req, res) => {
-    const { company, about, yearFounded, CEO } = req.body;
+    const { companyName, about, yearFounded, CEO } = req.body;
     try {
         const newCompany = await Company.create({
             _id: new mongoose.Types.ObjectId(),
-            company,
+            companyName,
             about,
             yearFounded,
             CEO,
@@ -67,7 +67,7 @@ const createCompanies = async (req, res) => {
 const updateCompanies = (req, res) => {
     const { companiesId } = req.params;
         Company.findById(companiesId)
-            .select("company about yearFounded CEO")
+            .select("companyName about yearFounded CEO")
             .populate("game", "name company")
             .exec()
             .then(company => {
@@ -89,7 +89,7 @@ const updateCompanies = (req, res) => {
 const deleteCompanies = (req, res) => {
     const { companiesId } = req.params;
         Company.findById(companiesId)
-            .select("company about yearFounded CEO")
+            .select("companyName about yearFounded CEO")
             .populate("game", "name company")
             .exec()
             .then(company => {
