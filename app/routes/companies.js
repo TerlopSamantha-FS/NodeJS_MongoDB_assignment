@@ -5,13 +5,13 @@ const {getCompanies, getCompaniesById, createCompanies, updateCompanies, deleteC
 
 router.get("/", getCompanies);
 
-router.get("/:CompaniesId", getCompaniesById);
+router.get("/:companiesId", getCompaniesById);
 
 router.post("/", createCompanies);
 
-router.patch("/:CompaniesId", updateCompanies);
+router.patch("/:companiesId", updateCompanies);
 
-router.delete("/:CompaniesId", deleteCompanies);
+router.delete("/:companiesId", deleteCompanies);
 
 
 module.exports = router;

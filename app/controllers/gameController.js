@@ -1,4 +1,5 @@
 const Game = require('../models/games');
+const mongoose = require('mongoose');
 
 const getGames = async (req, res) => {
     const games = await Game.find();
@@ -15,22 +16,36 @@ const getGamesById = async (req, res) => {
     const games = await Game.findById(gamesId);
     res.status(200) 
     .json({
-        data: gamesId,
+        data: games,
         status: "success",
         message: `${req.method} - Games Id request made`,
     });
 };
 
 const createGames = async (req, res) => {
-    const { game } = req.body;
-        const newGame = await Game.create(game); 
-        res.status(200)
-        .json({
+    const { gameTitle, gameGenre, releaseDate, company } = req.body;
+    try {
+        const newGame = await Game.create({
+            _id: new mongoose.Types.ObjectId(),
+            gameTitle,
+            gameGenre,
+            releaseDate,
+            company,
+        });
+
+        return res.status(200).json({
             data: newGame,
             status: 'success',
             message: `${req.method} - Games request made`,
         });
-    } 
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'An error occurred while creating the game.',
+        });
+    }
+} 
 
 const updateGames = async (req, res) => {
         const { gamesId } = req.params;

@@ -1,4 +1,5 @@
 const Company = require('../models/companies');
+const mongoose = require('mongoose');
 
 const getCompanies = async (req, res) => {
     const companies = await Company.find();
@@ -11,98 +12,100 @@ const getCompanies = async (req, res) => {
 };
 
 const getCompaniesById = async (req, res) => {
-    try {
-        const { CompaniesId } = req.params;
-        const companies = await Company.findById(CompaniesId);
-        if (!companies) {
-            return res.status(404).json({
-                message: "Company not found"
-            });
-        }
-        res.status(200).json({
-            data: companies,
-            status: "success"
-        });
-    } catch (err) {
-        res.status(500).json({
-            error: {
-                message: err.message
+    const { companiesId } = req.params;
+    await Company.findById(companiesId)
+        .select("company about yearFounded CEO")
+        .populate("game", "name company")
+        .exec()
+        .then(company => {
+            if (!company) {
+                console.log(company);
+                return res.status(404).json({
+                    message: "Company not found"
+                });
             }
+            res.status(201).json({
+                company: company,
+                status: "success"
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: {
+                    message: "Unable to save company"
+                }
+            });
         });
-    }
 };
 
 const createCompanies = async (req, res) => {
-    const { company } = req.body;
-    const newCompany = await Company.create(company);
-    res.status(200)
-        .json({
+    const { company, about, yearFounded, CEO } = req.body;
+    try {
+        const newCompany = await Company.create({
+            _id: new mongoose.Types.ObjectId(),
+            company,
+            about,
+            yearFounded,
+            CEO,
+        });
+
+        return res.status(200).json({
             data: newCompany,
-            status: "success",
+            status: 'success',
             message: `${req.method} - Company request made`,
         });
-};
-        
-const updateCompanies = async (req, res) => {
-    try {
-        const { CompaniesId } = req.params;
-        
-        // Assuming Company is a model you've defined somewhere
-        const companies = await Company.findById(CompaniesId);
-        
-        if (!companies) {
-            return res.status(404).json({
-                message: "Company not found"
-            });
-        }
-
-        // Update the company's information
-        const updatedCompanies = await Company.findByIdAndUpdate(CompaniesId, req.body, {
-            new: true,
-            runValidators: true,
-        });
-
-        res.status(200).json({
-            data: updatedCompanies,
-            status: "success",
-            message: `${req.method} - Company request made`
-        });
-    } catch (err) {
-        res.status(500).json({
-            error: {
-                message: err.message
-            }
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'An error occurred while creating the company.',
         });
     }
 };
+        
 
-const deleteCompanies = async (req, res) => {
-    try {
-        const { CompaniesId } = req.params;
-        
-        // Assuming Company is a model you've defined somewhere
-        const companies = await Company.findById(CompaniesId);
-        
-        if (!companies) {
-            return res.status(404).json({
-                message: "Company not found"
+const updateCompanies = (req, res) => {
+    const { companiesId } = req.params;
+        Company.findById(companiesId)
+            .select("company about yearFounded CEO")
+            .populate("game", "name company")
+            .exec()
+            .then(company => {
+                res.status(201).json({
+                    company: company,
+                    status: "success",
+                    message: "Company patched"
+                });
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: {
+                        message: "Unable to save company"
+                    }
+                });
             });
-        }
-        
-        await Company.findByIdAndDelete(CompaniesId);
+};
 
-        res.status(200).json({
-            CompaniesId,
-            status: "success",
-            message: `${req.method} - Company request made`
-        });
-    } catch (err) {
-        res.status(500).json({
-            error: {
-                message: err.message
-            }
-        });
-    }
+const deleteCompanies = (req, res) => {
+    const { companiesId } = req.params;
+        Company.findById(companiesId)
+            .select("company about yearFounded CEO")
+            .populate("game", "name company")
+            .exec()
+            .then(company => {
+                res.status(201).json({
+                    company: companiesId,
+                    status: "success",
+                    message: "Company deleted"
+                });
+            })
+            .catch(err => {
+                res.status(500).json({
+                    error: {
+                        message: "Unable to save company"
+                    }
+                });
+            });
 };
 
 module.exports = {

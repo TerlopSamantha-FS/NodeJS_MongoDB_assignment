@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
     const companySchema = new mongoose.Schema( {
-        companyName: {
+       _id: mongoose.Schema.Types.ObjectId,
+        company: {
             type: String,
             required: [true ,'company is already added. Please enter a new company.'],
             unique: true ,
